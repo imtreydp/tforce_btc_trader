@@ -10,15 +10,15 @@ I actually do want to try NervanaSystems/Coach, that one's new since I started d
 env back to Gym format. Anyone wanna give it a go?
 """
 
-import random, time, requests, pdb, gdax, math, pickle, os, shutil, copy
+import random, time, requests, pdb, cbpro, math, pickle, os, shutil, copy
 from sklearn.model_selection import TimeSeriesSplit
 from enum import Enum
 import numpy as np
 import pandas as pd
 import talib.abstract as tlib
 from box import Box
-from tensorforce.environments import Environment
-from tensorforce.execution import Runner
+from tensorforce.tensorforce.environments import Environment
+from tensorforce.tensorforce.execution import Runner
 from sklearn import preprocessing
 from data.data import Data, Exchange, EXCHANGE
 from utils import raise_refactor
@@ -59,8 +59,8 @@ class BitcoinEnv(Environment):
         self.acc = Box(train=copy.deepcopy(acc), test=copy.deepcopy(acc))
         self.data = Data(ep_len=self.EPISODE_LEN, arbitrage=h.custom.arbitrage, indicators={})
 
-        # gdax min order size = .01btc; kraken = .002btc
-        self.min_trade = {Exchange.GDAX: .01, Exchange.KRAKEN: .002}[EXCHANGE]
+        # cbpro min order size = .01btc; kraken = .002btc
+        self.min_trade = {Exchange.cbpro: .01, Exchange.KRAKEN: .002}[EXCHANGE]
         self.update_btc_price()
 
         # Action space
@@ -138,7 +138,7 @@ class BitcoinEnv(Environment):
         act_btc = act_pct * (acc.step.cash if act_pct > 0 else acc.step.value)
 
         fee = {
-            Exchange.GDAX: 0.0025,  # https://support.gdax.com/customer/en/portal/articles/2425097-what-are-the-fees-on-gdax-
+            Exchange.cbpro: 0.0025,  # https://support.cbpro.com/customer/en/portal/articles/2425097-what-are-the-fees-on-cbpro-
             Exchange.KRAKEN: 0.0026  # https://www.kraken.com/en-us/help/fees
         }[EXCHANGE]
 
